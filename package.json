@@ -1,0 +1,35 @@
+{
+  "name": "fraction.ts",
+  "version": "1.0.0",
+  "description": "A rational numbers library written in TypeScript",
+  "keywords": [
+    "math",
+    "numbers",
+    "ratio",
+    "fraction",
+    "fractions",
+    "rational",
+    "rationals",
+    "rational numbers",
+    "bigint",
+    "arbitrary precision",
+    "precision",
+    "decimal",
+    "numerator",
+    "denominator"
+  ],
+  "license": "MIT",
+  "author": "Gouvernathor",
+  "type": "module",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@tsconfig/strictest": "^2.0.5",
+    "vitest": "^3.2.4"
+  }
+}
