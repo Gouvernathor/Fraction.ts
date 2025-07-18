@@ -25,10 +25,19 @@ export class FractionImpl implements Fraction {
     }
 
     add(other: FractionAble): Fraction {
-        throw new Error("Method not implemented.");
+        other = fromAny(other);
+        return new FractionImpl(
+            this.numerator * other.denominator + other.numerator * this.denominator,
+            this.denominator * other.denominator
+        );
     }
     sub(other: FractionAble): Fraction {
-        throw new Error("Method not implemented.");
+        // not a call to add because inverting the other requires a call to fromAny
+        other = fromAny(other);
+        return new FractionImpl(
+            this.numerator * other.denominator - other.numerator * this.denominator,
+            this.denominator * other.denominator
+        );
     }
     mul(other: FractionAble): Fraction {
         other = fromAny(other);
@@ -48,23 +57,27 @@ export class FractionImpl implements Fraction {
         );
     }
 
-    compare(other: FractionAble): number | bigint {
-        throw new Error("Method not implemented.");
+    private compare(other: Fraction): bigint {
+        return this.numerator * other.denominator - other.numerator * this.denominator;
+    }
+    compareTo(other: FractionAble): number {
+        const c = this.compare(fromAny(other));
+        return c === 0n ? 0 : c > 0n ? 1 : -1;
     }
     equals(other: FractionAble): boolean {
-        return Number(this.compare(other)) === 0;
+        return this.compare(fromAny(other)) === 0n;
     }
     lt(other: FractionAble): boolean {
-        return this.compare(other) < 0;
+        return this.compare(fromAny(other)) < 0n;
     }
     lte(other: FractionAble): boolean {
-        return this.compare(other) <= 0;
+        return this.compare(fromAny(other)) <= 0n;
     }
     gt(other: FractionAble): boolean {
-        return this.compare(other) > 0;
+        return this.compare(fromAny(other)) > 0n;
     }
     gte(other: FractionAble): boolean {
-        return this.compare(other) >= 0;
+        return this.compare(fromAny(other)) >= 0n;
     }
 
     mod(): Fraction;

@@ -17,7 +17,7 @@ export interface Fraction {
     mul(other: FractionAble): Fraction;
     div(other: FractionAble): Fraction;
 
-    compare(other: FractionAble): number|bigint;
+    compareTo(other: FractionAble): number;
     equals(other: FractionAble): boolean;
     lt(other: FractionAble): boolean;
     lte(other: FractionAble): boolean;
