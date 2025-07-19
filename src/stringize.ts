@@ -1,15 +1,48 @@
 import { Fraction } from "./interface";
 
-declare function cycleLen(numerator: bigint, denominator: bigint): bigint;
-declare function cycleStart(numerator: bigint, denominator: bigint, cycleLength: bigint): bigint;
-// TODO make one function returning both values
+const MAX_CYCLE_LENGTH = 2000n;
+
+declare function modPow(base: bigint, exp: bigint, mod: bigint): bigint;
+function cycleLen(denominator: bigint): bigint {
+    while (denominator % 2n === 0n) denominator /= 2n;
+
+    while (denominator % 5n === 0n) denominator /= 5n;
+
+    if (denominator === 1n) return 0n;
+
+    let rem = 10n % denominator;
+    let t = 1n;
+
+    while (rem !== 1n) {
+        rem = (rem * 10n) % denominator;
+        t++;
+        if (t > MAX_CYCLE_LENGTH) {
+            return 0n; // meaning that it's not printed as a cyclic number, the answer is likely denominator-1
+        }
+    }
+    return t;
+}
+function cycleStart(denominator: bigint, cycleLength: bigint): bigint {
+    let rem1 = 1n;
+    let rem2 = modPow(10n, cycleLength, denominator);
+
+    for (let t = 0n; t < 300n; t++) {
+        if (rem1 === rem2) {
+            return t;
+        }
+
+        rem1 = (rem1 * 10n) % denominator;
+        rem2 = (rem2 * 10n) % denominator;
+    }
+    return 0n;
+}
 
 export function stringize(this: Fraction, dec = 15n): string {
     let N = this.numerator < 0n ? -this.numerator : this.numerator;
     let D = this.denominator;
 
-    const cyclen = cycleLen(N, D);
-    const cycoff = cycleStart(N, D, cyclen);
+    const cyclen = cycleLen(D);
+    const cycoff = cycleStart(D, cyclen);
 
     let str = (this.numerator < 0n ? "-" : "")
         + (N / D).toString();
