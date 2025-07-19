@@ -109,8 +109,11 @@ export class FractionImpl implements Fraction {
             this.denominator / g
         ) as IrreducibleFraction;
     }
-    private *toAbsContinued(): Generator<bigint> {
-        let a = this.numerator > 0n ? this.numerator : -this.numerator;
+    /**
+     * Must only be called on a positive fraction.
+     */
+    private *absToContinued(): Generator<bigint> {
+        let a = this.numerator;
         let b = this.denominator;
 
         do {
@@ -128,13 +131,14 @@ export class FractionImpl implements Fraction {
         const eps = fromAny(error).abs();
 
         const abs = this.abs();
-        const cont = Array.from(this.toAbsContinued());
+        const cont = Array.from(abs.absToContinued());
 
         for (let i = 1; i < cont.length; i++) {
             let s = new FractionImpl(cont[i-1]!, 1n);
             for (let j = i - 2; j >= 0; j--) {
                 s = s.invert().add(fromBigInt(cont[j]!));
             }
+
             const diff = s.sub(abs).abs();
             if (diff.lt(eps)) {
                 if (this.numerator < 0n) {
