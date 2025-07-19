@@ -1,24 +1,41 @@
+import { tupleFromNumber } from "./fromNumber";
 import { FractionImpl } from "./implcls";
 import { Fraction, FractionAble } from "./interface";
 import { parse as fromString } from "./parse";
 
-export declare function fromNumber(num: number): Fraction;
+export function fromNumber(num: number): Fraction {
+    if (isNaN(num)) {
+        throw new TypeError("Cannot create Fraction from NaN.");
+    }
+
+    if (num % 1 == 0) { // double equals because if num is negative, num % 1 is -0
+        return fromBigInt(BigInt(num));
+    }
+
+    return fromTuple(tupleFromNumber(num));
+}
+
 export function fromBigInt(num: bigint): Fraction {
     return new FractionImpl(num, 1n);
 }
+
 export { fromString };
+
 export function fromPair(num: bigint|number, denom: bigint|number): Fraction {
     return new FractionImpl(
         BigInt(num),
         BigInt(denom)
     );
 }
+
 export function fromTuple([num, denom]: [bigint|number, bigint|number]): Fraction {
     return fromPair(num, denom);
 }
+
 export function fromObject({numerator, denominator }: { numerator: bigint; denominator: bigint }): Fraction {
     return new FractionImpl(numerator, denominator);
 }
+
 
 export function fromAny(obj: FractionAble): Fraction {
     if (obj instanceof FractionImpl) {
@@ -36,6 +53,7 @@ export function fromAny(obj: FractionAble): Fraction {
     }
     throw new TypeError(`Unsupported type for Fraction creation for ${obj}`);
 }
+
 
 // that will be exported as Function()
 export function mainConstructor(obj: FractionAble): Fraction;
