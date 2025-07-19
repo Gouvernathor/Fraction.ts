@@ -1,7 +1,7 @@
 import { tupleFromNumber } from "./fromNumber";
 import { FractionImpl } from "./implcls";
 import { Fraction, FractionAble } from "./interface";
-import { parse as fromString } from "./parse";
+import { parse } from "./parse";
 
 export function fromNumber(num: number): Fraction {
     if (isNaN(num)) {
@@ -19,7 +19,9 @@ export function fromBigInt(num: bigint): Fraction {
     return new FractionImpl(num, 1n);
 }
 
-export { fromString };
+export function fromString(str: string): Fraction {
+    return fromTuple(parse(str));
+}
 
 export function fromPair(num: bigint|number, denom: bigint|number): Fraction {
     return new FractionImpl(
