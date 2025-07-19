@@ -1,4 +1,4 @@
-import { fromAny, fromBigInt } from "./constructors";
+import { fromAny } from "./constructors";
 import { Fraction, FractionAble, IrreducibleFraction } from "./interface";
 import { gcd } from "./mathUtils";
 import { stringize } from "./stringize";
@@ -210,7 +210,7 @@ export class FractionImpl implements Fraction {
         for (let i = 1; i < cont.length; i++) {
             let s = new FractionImpl(cont[i - 1]!, 1n);
             for (let j = i - 2; j >= 0; j--) {
-                s = s.invert().add(fromBigInt(cont[j]!));
+                s = s.invert().add(cont[j]!);
             }
             yield s;
         }
