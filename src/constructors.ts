@@ -1,3 +1,4 @@
+import { FractionImpl } from "./implcls";
 import { Fraction, FractionAble } from "./interface";
 
 export declare function fromNumber(num: number): Fraction;
@@ -10,7 +11,9 @@ export function fromTuple([num, denom]: [bigint|number, bigint|number]): Fractio
 export declare function fromObject(obj: { numerator: bigint; denominator: bigint }): Fraction;
 
 export function fromAny(obj: FractionAble): Fraction {
-    if (typeof obj === "number") {
+    if (obj instanceof FractionImpl) {
+        return obj;
+    } else if (typeof obj === "number") {
         return fromNumber(obj);
     } else if (typeof obj === "bigint") {
         return fromBigInt(obj);
