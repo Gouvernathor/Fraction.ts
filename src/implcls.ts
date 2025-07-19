@@ -85,8 +85,19 @@ export class FractionImpl implements Fraction {
         return this.compare(fromAny(other)) >= 0n;
     }
 
-    mod(n?: bigint | number): FractionImpl {
-        throw new Error("Method not implemented.");
+    mod(n: FractionAble = ONE_FRAC): FractionImpl {
+        if (n === undefined) {
+            return new FractionImpl(this.numerator % this.denominator, 1n);
+        }
+
+        n = fromAny(n);
+        if (n.denominator === 0n) {
+            throw new Error("Modulo by zero.");
+        }
+        return new FractionImpl(
+            (n.denominator * this.numerator) % (n.numerator * this.denominator),
+            n.denominator * this.denominator
+        );
     }
 
     ceil(): bigint {
@@ -207,3 +218,5 @@ class IrreducibleFractionImpl extends FractionImpl implements IrreducibleFractio
         return this; // already irreducible
     }
 }
+
+const ONE_FRAC = new IrreducibleFractionImpl(1n, 1n);

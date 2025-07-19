@@ -27,8 +27,14 @@ export interface Fraction {
     // pow(exponent: bigint|Fraction): Fraction;
     // log(base?: unknown): Fraction;
 
+    /**
+     * Returns the modulo of the numerator with respect to the denominator.
+     */
     mod(): Fraction;
-    mod(n: bigint|number): Fraction;
+    /**
+     * Returns the modulo of the fraction with respect to another fraction or number.
+     */
+    mod(n: FractionAble): Fraction;
 
     // gcd(): Fraction;
     // lcm(): Fraction;
