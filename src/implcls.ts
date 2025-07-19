@@ -101,16 +101,28 @@ export class FractionImpl implements Fraction {
     }
 
     ceil(): bigint {
-        throw new Error("Method not implemented.");
+        return this.numerator / this.denominator +
+            BigInt(this.numerator % this.denominator !== 0n && this.numerator >= 0n);
     }
     floor(): bigint {
-        throw new Error("Method not implemented.");
+        return this.numerator / this.denominator -
+            BigInt(this.numerator % this.denominator !== 0n && this.numerator < 0n);
     }
     round(): bigint {
-        throw new Error("Method not implemented.");
+        const sign = this.numerator < 0n ? -1n : 1n;
+        return this.numerator / this.denominator +
+            sign * (BigInt(this.numerator >= 0n) + BigInt(2n * (this.numerator % this.denominator) > this.denominator));
     }
     roundTo(multiple: Fraction): FractionImpl {
-        throw new Error("Method not implemented.");
+        const n = this.numerator * multiple.denominator;
+        const d = this.denominator * multiple.numerator;
+        const r = n % d;
+
+        let k = n / d;
+        if (2n*r >= d) {
+            k++;
+        }
+        return new FractionImpl(k * multiple.numerator, multiple.denominator);
     }
 
     asIrreducible(): IrreducibleFractionImpl {
