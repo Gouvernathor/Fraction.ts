@@ -3,20 +3,32 @@ import { FractionImpl } from "./implcls";
 import { Fraction, FractionAble } from "./interface";
 import { parse } from "./parse";
 
-export function fromNumber(num: number): Fraction {
-    if (isNaN(num)) {
-        throw new TypeError("Cannot create Fraction from NaN.");
+function fromBigInt(num: bigint): Fraction {
+    return new FractionImpl(num, 1n);
+}
+
+function fromNumber(num: number): Fraction {
+    if (Number.isInteger(num)) {
+        return fromBigInt(BigInt(num));
     }
 
-    if (num % 1 == 0) { // double equals because if num is negative, num % 1 is -0
-        return fromBigInt(BigInt(num));
+    if (Number.isNaN(num)) {
+        throw new TypeError("Cannot create Fraction from NaN.");
+    }
+    if (!Number.isFinite(num)) {
+        throw new TypeError("Cannot create Fraction from non-finite number.");
     }
 
     return fromTuple(tupleFromNumber(num));
 }
 
-export function fromBigInt(num: bigint): Fraction {
-    return new FractionImpl(num, 1n);
+export function fromNumeric(num: bigint|number): Fraction {
+    if (typeof num === "bigint") {
+        return fromBigInt(num);
+    } else if (typeof num === "number") {
+        return fromNumber(num);
+    }
+    throw new TypeError(`Value of unsupported type for Fraction creation: ${num}`);
 }
 
 export function fromString(str: string): Fraction {
@@ -24,10 +36,7 @@ export function fromString(str: string): Fraction {
 }
 
 export function fromPair(num: bigint|number, denom: bigint|number): Fraction {
-    return new FractionImpl(
-        BigInt(num),
-        BigInt(denom)
-    );
+    return fromNumeric(num).div(fromNumeric(denom));
 }
 
 export function fromTuple([num, denom]: [bigint|number, bigint|number]): Fraction {
@@ -57,13 +66,13 @@ export function fromAny(obj: FractionAble): Fraction {
 }
 
 
-// that will be exported as Function()
-export function mainConstructor(obj: FractionAble): Fraction;
-export function mainConstructor(a: bigint|number, b: bigint|number): Fraction;
-export function mainConstructor(a: FractionAble, b?: bigint|number): Fraction {
-    let rv = fromAny(a);
-    if (b !== undefined) {
-        rv = fromPair(rv.numerator, rv.denominator * BigInt(b));
+// that should be exported as Function()
+export default function mainConstructor(obj: FractionAble): Fraction;
+export default function mainConstructor(a: bigint|number, b: bigint|number): Fraction;
+export default function mainConstructor(a: FractionAble, b?: bigint|number): Fraction {
+    if (b === undefined) {
+        return fromAny(a);
+    } else {
+        return fromPair(a as bigint|number, b);
     }
-    return rv;
 }
