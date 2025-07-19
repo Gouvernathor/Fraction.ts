@@ -1,6 +1,7 @@
 import { fromAny, fromBigInt } from "./constructors";
 import { Fraction, FractionAble, IrreducibleFraction } from "./interface";
 import { gcd } from "./mathUtils";
+import { stringize } from "./stringize";
 
 export class FractionImpl implements Fraction {
     constructor(
@@ -188,9 +189,7 @@ export class FractionImpl implements Fraction {
         }
         return Number(this.numerator) / Number(this.denominator);
     }
-    toString(): string {
-        throw new Error("Method not implemented.");
-    }
+    toString = stringize;
     [Symbol.toPrimitive](hint: string): string | number | bigint {
         if (hint === "string") {
             return this.toString();

@@ -1,9 +1,10 @@
 import { FractionImpl } from "./implcls";
 import { Fraction, FractionAble } from "./interface";
+import { parse as fromString } from "./parse";
 
 export declare function fromNumber(num: number): Fraction;
 export declare function fromBigInt(num: bigint): Fraction;
-export declare function fromString(str: string): Fraction; // re-export a parse function
+export { fromString };
 export declare function fromPair(num: bigint|number, denom: bigint|number): Fraction;
 export function fromTuple([num, denom]: [bigint|number, bigint|number]): Fraction {
     return fromPair(num, denom);
