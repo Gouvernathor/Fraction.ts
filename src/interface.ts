@@ -38,8 +38,22 @@ export interface Fraction {
     round(): bigint;
     roundTo(multiple: Fraction): Fraction;
 
-    simplify(precision?: Numeric): IrreducibleFraction;
-    valueOf(): number|bigint; // returns a number
+    /**
+     * Converts the fraction to an irreducible form.
+     */
+    asIrreducible(): IrreducibleFraction;
+    /**
+     * Limits the denominator of the fraction to a maximum value.
+     * @param maxDenominator The maximum allowed denominator.
+     */
+    limitDenominator(maxDenominator: bigint|number): Fraction;
+    /**
+     * Simplifies the fraction to lower terms.
+     * @param precision The maximum allowed error for the simplification.
+     */
+    simplify(precision: Numeric): Fraction;
+
+    valueOf(): number|bigint;
     toString(): string;
     [Symbol.toPrimitive](hint: "number"|"string"|"default"): string|number|bigint;
 }

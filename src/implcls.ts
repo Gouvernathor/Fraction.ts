@@ -1,5 +1,6 @@
-import { fromAny } from "./constructors";
+import { fromAny, fromBigInt } from "./constructors";
 import { Fraction, FractionAble, IrreducibleFraction } from "./interface";
+import { gcd } from "./mathUtils";
 
 export class FractionImpl implements Fraction {
     constructor(
@@ -100,9 +101,51 @@ export class FractionImpl implements Fraction {
         throw new Error("Method not implemented.");
     }
 
-    simplify(precision?: number | bigint | Fraction): IrreducibleFraction {
+    asIrreducible(): IrreducibleFraction {
+        // TODO test if this works for a negative fraction
+        const g = gcd(this.numerator, this.denominator);
+        return new FractionImpl(
+            this.numerator / g,
+            this.denominator / g
+        ) as IrreducibleFraction;
+    }
+    private *toAbsContinued(): Generator<bigint> {
+        let a = this.numerator > 0n ? this.numerator : -this.numerator;
+        let b = this.denominator;
+
+        do {
+            yield a / b;
+            [a, b] = [b, a % b];
+        } while (a !== 0n);
+    }
+    limitDenominator(maxDenominator: bigint | number): IrreducibleFraction {
         throw new Error("Method not implemented.");
     }
+    simplify(error: number | bigint | Fraction): Fraction {
+        // takes the simplest functions from the continued,
+        // until it is within the required error gap
+
+        const eps = fromAny(error).abs();
+
+        const abs = this.abs();
+        const cont = Array.from(this.toAbsContinued());
+
+        for (let i = 1; i < cont.length; i++) {
+            let s = new FractionImpl(cont[i-1]!, 1n);
+            for (let j = i - 2; j >= 0; j--) {
+                s = s.invert().add(fromBigInt(cont[j]!));
+            }
+            const diff = s.sub(abs).abs();
+            if (diff.lt(eps)) {
+                if (this.numerator < 0n) {
+                    s = s.neg();
+                }
+                return s;
+            }
+        }
+        return this; // if nothing found, return the absolute value
+    }
+
     valueOf(): number | bigint {
         if (this.denominator === 1n) {
             return this.numerator;
