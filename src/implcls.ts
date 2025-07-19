@@ -6,8 +6,11 @@ export class FractionImpl implements Fraction {
         public readonly numerator: bigint,
         public readonly denominator: bigint
     ) {
-        if (denominator === 0n) {
-            throw new Error("Denominator cannot be zero.");
+        if (denominator <= 0n) {
+            if (denominator === 0n) {
+                throw new Error("Denominator cannot be zero.");
+            }
+            throw new Error("Denominator must be positive.");
         }
     }
 
