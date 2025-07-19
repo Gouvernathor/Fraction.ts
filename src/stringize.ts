@@ -2,7 +2,18 @@ import { Fraction } from "./interface";
 
 const MAX_CYCLE_LENGTH = 2000n;
 
-declare function modPow(base: bigint, exp: bigint, mod: bigint): bigint;
+function modPow(base: bigint, exp: bigint, mod: bigint): bigint {
+    let result = 1n;
+    while (exp > 1n) {
+        if (exp & 1n) {
+            result = (result * base) % mod;
+        }
+
+        base = (base * base) % mod;
+        exp >>= 1n;
+    }
+    return result;
+}
 function cycleLen(denominator: bigint): bigint {
     while (denominator % 2n === 0n) denominator /= 2n;
 
