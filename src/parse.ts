@@ -61,3 +61,60 @@ export function parse(str: string): [bigint, bigint] {
         throw new TypeError(`Cannot parse "${str}" as a fraction.`);
     }
 }
+
+// decimal forms
+const decimalInt = /^(\d+)\.?$/g; // 123. or 123
+
+// decimal with repeating part
+const decimalRepeatingFloat = /^(\d*)\.(\d*)(?:('|\()(\d+)('|\)))?$/g;
+
+// fraction forms
+/^\d+[/:]\d+$/g; // 123\456 or 123:456
+// with a preceding whole number
+const fractionWithWhole = /^(?:(\d+) )?(\d+)[/:](\d+)$/g; // 123 456/789 or 123 456:789
+
+export function parse2(str: string): [bigint, bigint] {
+    let r = decimalInt.exec(str);
+    if (r) {
+        return [BigInt(r[1]!), 1n];
+    }
+
+    r = decimalRepeatingFloat.exec(str);
+    if (r) {
+        const intPart = r[1] ? BigInt(r[1]) : 0n;
+        if (r[3] === undefined) {
+            // no repeating part
+            if (!r[2] && !r[1]) {
+                // just a dot, not valid
+                throw new TypeError(`Cannot parse "${str}" as a fraction.`);
+            }
+            const fracPart = BigInt(r[2]!);
+            const denominator = 10n ** BigInt(r[2]!.length);
+            return [intPart * denominator + fracPart, denominator];
+        } else if (r[3] === "'" && r[5] !== "'") {
+            // mismatched repeating enclosing
+            throw new TypeError(`Cannot parse "${str}" as a fraction.`);
+        } else {
+            const nonRepeatingPart = BigInt(r[2]!);
+            const nonRepeatingDenominator = 10n ** BigInt(r[2]!.length);
+            const repeatingPart = BigInt(r[4]!);
+            const repeatingDenominator = 10n ** BigInt(r[4]!.length) - 1n;
+            const denominator = nonRepeatingDenominator * repeatingDenominator;
+            const numerator = repeatingPart + denominator * intPart + repeatingDenominator * nonRepeatingPart;
+            return [numerator, denominator];
+        }
+    }
+
+    r = fractionWithWhole.exec(str);
+    if (r) {
+        const wholePart = r[1] ? BigInt(r[1]) : 0n;
+        const numerator = BigInt(r[2]!);
+        const denominator = BigInt(r[3]!);
+        if (denominator === 0n) {
+            throw new TypeError(`Cannot parse "${str}" as a fraction: denominator cannot be zero.`);
+        }
+        return [wholePart * denominator + numerator, denominator];
+    }
+
+    throw new TypeError(`Cannot parse "${str}" as a fraction.`);
+}
