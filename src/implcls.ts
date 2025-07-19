@@ -234,11 +234,23 @@ export class FractionImpl implements Fraction {
         return this; // if nothing found, return the absolute value
     }
 
-    valueOf(): number | bigint {
+    protected numValue(): number|bigint {
         if (this.denominator === 1n) {
             return this.numerator;
         }
         return Number(this.numerator) / Number(this.denominator);
+    }
+    valueOf(): number | bigint {
+        const nv = this.numValue();
+        if (!Number.isFinite(nv)) {
+            return nv;
+        }
+        // if one of the values is out of f64 bounds, as a number it will be infinity,
+        // and the result will be infinity.
+        // if both are, the result will be NaN.
+        // reducing both values can help bring them into bounds.
+        // if that's still NaN, give up
+        return this.asIrreducible().numValue();
     }
     toString = stringize;
     [Symbol.toPrimitive](hint: string): string | number | bigint {
@@ -256,6 +268,10 @@ class IrreducibleFractionImpl extends FractionImpl implements IrreducibleFractio
 
     override asIrreducible(): IrreducibleFractionImpl {
         return this; // already irreducible
+    }
+
+    override valueOf(): number | bigint {
+        return this.numValue();
     }
 }
 
