@@ -30,6 +30,13 @@ export class FractionImpl implements Fraction {
     }
 
     add(other: FractionAble): FractionImpl {
+        if (typeof other === "bigint") {
+            return new FractionImpl(
+                this.numerator + other * this.denominator,
+                this.denominator
+            );
+        }
+
         other = fromAny(other);
         return new FractionImpl(
             this.numerator * other.denominator + other.numerator * this.denominator,
@@ -38,6 +45,10 @@ export class FractionImpl implements Fraction {
     }
     sub(other: FractionAble): FractionImpl {
         // not a call to add because inverting the other requires a call to fromAny
+        if (typeof other === "bigint") {
+            return this.add(-other);
+        }
+
         other = fromAny(other);
         return new FractionImpl(
             this.numerator * other.denominator - other.numerator * this.denominator,
@@ -45,6 +56,13 @@ export class FractionImpl implements Fraction {
         );
     }
     mul(other: FractionAble): FractionImpl {
+        if (typeof other === "bigint") {
+            return new FractionImpl(
+                this.numerator * other,
+                this.denominator
+            );
+        }
+
         other = fromAny(other);
         return new FractionImpl(
             this.numerator * other.numerator,
@@ -52,6 +70,16 @@ export class FractionImpl implements Fraction {
         );
     }
     div(other: FractionAble): FractionImpl {
+        if (typeof other === "bigint") {
+            if (other === 0n) {
+                throw new Error("Division by zero.");
+            }
+            return new FractionImpl(
+                this.numerator,
+                this.denominator * other
+            );
+        }
+
         other = fromAny(other);
         if (other.numerator === 0n) {
             throw new Error("Division by zero.");
