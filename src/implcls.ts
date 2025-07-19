@@ -121,6 +121,17 @@ export class FractionImpl implements Fraction {
             [a, b] = [b, a % b];
         } while (a !== 0n);
     }
+    private *generateSimplifiedAbs(): Generator<FractionImpl> {
+        const cont = Array.from(this.abs().absToContinued());
+
+        for (let i = 1; i < cont.length; i++) {
+            let s = new FractionImpl(cont[i - 1]!, 1n);
+            for (let j = i - 2; j >= 0; j--) {
+                s = s.invert().add(fromBigInt(cont[j]!));
+            }
+            yield s;
+        }
+    }
     limitDenominator(maxDenominator: bigint | number): IrreducibleFraction {
         throw new Error("Method not implemented.");
     }
@@ -130,23 +141,16 @@ export class FractionImpl implements Fraction {
 
         const eps = fromAny(error).abs();
 
-        const abs = this.abs();
-        const cont = Array.from(abs.absToContinued());
-
-        for (let i = 1; i < cont.length; i++) {
-            let s = new FractionImpl(cont[i-1]!, 1n);
-            for (let j = i - 2; j >= 0; j--) {
-                s = s.invert().add(fromBigInt(cont[j]!));
-            }
-
-            const diff = s.sub(abs).abs();
+        for (const s of this.generateSimplifiedAbs()) {
+            const diff = s.sub(this).abs();
             if (diff.lt(eps)) {
                 if (this.numerator < 0n) {
-                    s = s.neg();
+                    return s.neg();
                 }
                 return s;
             }
         }
+
         return this; // if nothing found, return the absolute value
     }
 
