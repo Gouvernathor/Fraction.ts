@@ -101,13 +101,44 @@ export class FractionImpl implements Fraction {
         throw new Error("Method not implemented.");
     }
 
-    asIrreducible(): IrreducibleFraction {
+    asIrreducible(): IrreducibleFractionImpl {
         // TODO test if this works for a negative fraction
         const g = gcd(this.numerator, this.denominator);
-        return new FractionImpl(
+        return new IrreducibleFractionImpl(
             this.numerator / g,
             this.denominator / g
-        ) as IrreducibleFraction;
+        );
+    }
+    limitDenominator(maxDenominator: bigint): IrreducibleFractionImpl {
+        if (maxDenominator < 1) {
+            throw new Error("Maximum denominator must be at least 1.");
+        }
+
+        if (this.denominator <= maxDenominator) {
+            return this;
+        }
+
+        let [p0, q0, p1, q1] = [0n, 1n, 1n, 0n];
+        let [n, d] = [this.numerator, this.denominator];
+        while (true) {
+            const a = n / d;
+            const q2 = q0 + a * q1;
+            if (q2 > maxDenominator) {
+                break;
+            }
+            [p0, q0, p1, q1] = [p1, q1, p0 + a * p1, q2];
+            [n, d] = [d, n - a * d];
+        }
+        const k = (maxDenominator - q0) / q1;
+
+        if (2n*d*(q0 + k*q1) <= this.denominator) {
+            return new IrreducibleFractionImpl(p1, q1);
+        } else {
+            return new IrreducibleFractionImpl(
+                p0 + k * p1,
+                q0 + k * q1
+            );
+        }
     }
     /**
      * Must only be called on a positive fraction.
@@ -131,9 +162,6 @@ export class FractionImpl implements Fraction {
             }
             yield s;
         }
-    }
-    limitDenominator(maxDenominator: bigint | number): IrreducibleFraction {
-        throw new Error("Method not implemented.");
     }
     simplify(error: number | bigint | Fraction): Fraction {
         // takes the simplest functions from the continued,
@@ -168,5 +196,15 @@ export class FractionImpl implements Fraction {
             return this.toString();
         }
         return this.valueOf();
+    }
+}
+
+class IrreducibleFractionImpl extends FractionImpl implements IrreducibleFraction {
+    constructor(numerator: bigint, denominator: bigint) {
+        super(numerator, denominator);
+    }
+
+    override asIrreducible(): IrreducibleFractionImpl {
+        return this; // already irreducible
     }
 }

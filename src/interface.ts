@@ -46,7 +46,7 @@ export interface Fraction {
      * Limits the denominator of the fraction to a maximum value.
      * @param maxDenominator The maximum allowed denominator.
      */
-    limitDenominator(maxDenominator: bigint|number): Fraction;
+    limitDenominator(maxDenominator: bigint): Fraction;
     /**
      * Simplifies the fraction to lower terms.
      * @param precision The maximum allowed error for the simplification.
