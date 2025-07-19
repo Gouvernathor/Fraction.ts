@@ -14,27 +14,27 @@ export class FractionImpl implements Fraction {
         }
     }
 
-    abs(): Fraction {
+    abs(): FractionImpl {
         return new FractionImpl(
             this.numerator < 0n ? -this.numerator : this.numerator,
             this.denominator < 0n ? -this.denominator : this.denominator
         );
     }
-    neg(): Fraction {
+    neg(): FractionImpl {
         return new FractionImpl(-this.numerator, this.denominator);
     }
-    invert(): Fraction {
+    invert(): FractionImpl {
         return new FractionImpl(this.denominator, this.numerator);
     }
 
-    add(other: FractionAble): Fraction {
+    add(other: FractionAble): FractionImpl {
         other = fromAny(other);
         return new FractionImpl(
             this.numerator * other.denominator + other.numerator * this.denominator,
             this.denominator * other.denominator
         );
     }
-    sub(other: FractionAble): Fraction {
+    sub(other: FractionAble): FractionImpl {
         // not a call to add because inverting the other requires a call to fromAny
         other = fromAny(other);
         return new FractionImpl(
@@ -42,14 +42,14 @@ export class FractionImpl implements Fraction {
             this.denominator * other.denominator
         );
     }
-    mul(other: FractionAble): Fraction {
+    mul(other: FractionAble): FractionImpl {
         other = fromAny(other);
         return new FractionImpl(
             this.numerator * other.numerator,
             this.denominator * other.denominator
         );
     }
-    div(other: FractionAble): Fraction {
+    div(other: FractionAble): FractionImpl {
         other = fromAny(other);
         if (other.numerator === 0n) {
             throw new Error("Division by zero.");
@@ -83,9 +83,7 @@ export class FractionImpl implements Fraction {
         return this.compare(fromAny(other)) >= 0n;
     }
 
-    mod(): Fraction;
-    mod(n: bigint | number): Fraction;
-    mod(n?: bigint | number): Fraction {
+    mod(n?: bigint | number): FractionImpl {
         throw new Error("Method not implemented.");
     }
 
@@ -98,7 +96,7 @@ export class FractionImpl implements Fraction {
     round(): bigint {
         throw new Error("Method not implemented.");
     }
-    roundTo(multiple: Fraction): Fraction {
+    roundTo(multiple: Fraction): FractionImpl {
         throw new Error("Method not implemented.");
     }
 
