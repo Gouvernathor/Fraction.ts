@@ -65,3 +65,21 @@ it("accepts strings", () => {
     expect(fraction.numerator).toBe(625n);
     expect(fraction.denominator).toBe(1000n);
 });
+
+it("accepts pairs", () => {
+    let fraction = Fraction(1, 2);
+    expect(fraction.numerator).toBe(1n);
+    expect(fraction.denominator).toBe(2n);
+
+    fraction = Fraction(-1, -2);
+    expect(fraction.numerator).toBe(1n);
+    expect(fraction.denominator).toBe(2n);
+
+    fraction = Fraction(-1, 2);
+    expect(fraction.numerator).toBe(-1n);
+    expect(fraction.denominator).toBe(2n);
+
+    fraction = Fraction(1, -2);
+    expect(fraction.numerator).toBe(-1n);
+    expect(fraction.denominator).toBe(2n);
+});
