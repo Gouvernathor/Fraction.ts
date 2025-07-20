@@ -11,6 +11,9 @@ function randDigit(): string {
 it("builds a fraction from two random bigints", () => {
     const a = BigInt(Array.from({ length: Math.floor(Math.random() * 15) + 1 }, randDigit).join(""));
     const b = BigInt(Array.from({ length: Math.floor(Math.random() * 15) + 1 }, randDigit).join(""));
+    if (b === 0n) {
+        return; // skip division by zero
+    }
     let fpair = Fraction.fromPair(a, b);
     let ftuple = Fraction.fromTuple([a, b]);
     let fobj = Fraction.fromObject({ numerator: a, denominator: b });
@@ -59,6 +62,9 @@ it("builds a fraction from two random bigints", () => {
 it("builds the same fraction from fromPair, fromTuple and fromObject with the same bigint values", () => {
     const a = BigInt(Array.from({ length: Math.floor(Math.random() * 15) + 1 }, randDigit).join(""));
     const b = BigInt(Array.from({ length: Math.floor(Math.random() * 15) + 1 }, randDigit).join(""));
+    if (b === 0n) {
+        return; // skip division by zero
+    }
     const fpair = Fraction.fromPair(a, b);
     const ftuple = Fraction.fromTuple([a, b]);
     const fobj = Fraction.fromObject({ numerator: a, denominator: b });
@@ -76,6 +82,9 @@ it("supports any combination of bigint and number in fromPair and fromTuple", ()
     const bigB = BigInt(Array.from({ length: Math.floor(Math.random() * 15) + 1 }, randDigit).join(""));
     const numA = Number(bigA);
     const numB = Number(bigB);
+    if (numB === 0) {
+        return; // skip division by zero
+    }
 
     let t = (f: Fraction) => {
         expect(f.numerator).toEqual(bigA);
@@ -125,6 +134,9 @@ it("builds the same fraction from fromPair and fromTuple with the same bigint or
     const bigB = BigInt(Array.from({ length: Math.floor(Math.random() * 15) + 1 }, randDigit).join(""));
     const numA = Number(bigA);
     const numB = Number(bigB);
+    if (numB === 0) {
+        return; // skip division by zero
+    }
 
     let t = (f: Fraction, ...fs: Fraction[]) => {
         for (const f2 of fs) {
