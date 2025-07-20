@@ -1,4 +1,4 @@
-export function parse(str: string): [bigint, bigint] {
+function parseLegacy(str: string): [bigint, bigint] {
     let sign = 1n;
     let ndx = 0;
 
@@ -77,27 +77,29 @@ const decimalRepeatingFloat = /^(\d*)\.(\d*)(?:('|\()(\d+)('|\)))?$/;
 // with a preceding whole number
 const fractionWithWhole = /^(?:(\d+) )?(\d+)[/:](\d+)$/; // 123 456/789 or 123 456:789
 
-export function parse2(str: string): [bigint, bigint] {
-    let r = decimalInt.exec(str);
-    if (r) {
+/**
+ * A less efficient version (using several regexes), but more readable and more permissive.
+ */
+function parseRevamp(str: string): [bigint, bigint] {
+    let r: ReturnType<typeof RegExp.prototype.exec>;
+    if (r = decimalInt.exec(str)) {
         return [BigInt(r[1]!), 1n];
     }
 
-    r = decimalRepeatingFloat.exec(str);
-    if (r) {
+    if (r = decimalRepeatingFloat.exec(str)) {
         const intPart = r[1] ? BigInt(r[1]) : 0n;
         if (r[3] === undefined) {
             // no repeating part
             if (!r[2] && !r[1]) {
                 // just a dot, not valid
-                throw new TypeError(`Cannot parse "${str}" as a fraction.`);
+                throw new TypeError(`Cannot parse "${str}" as a fraction: no digits found.`);
             }
             const fracPart = BigInt(r[2]!);
             const denominator = 10n ** BigInt(r[2]!.length);
             return [intPart * denominator + fracPart, denominator];
         } else if (r[3] === "'" && r[5] !== "'") {
             // mismatched repeating enclosing
-            throw new TypeError(`Cannot parse "${str}" as a fraction.`);
+            throw new TypeError(`Cannot parse "${str}" as a fraction: mismatched repeating enclosing.`);
         } else {
             const nonRepeatingPart = BigInt(r[2]!);
             const nonRepeatingDenominator = 10n ** BigInt(r[2]!.length);
@@ -109,8 +111,7 @@ export function parse2(str: string): [bigint, bigint] {
         }
     }
 
-    r = fractionWithWhole.exec(str);
-    if (r) {
+    if (r = fractionWithWhole.exec(str)) {
         const wholePart = r[1] ? BigInt(r[1]) : 0n;
         const numerator = BigInt(r[2]!);
         const denominator = BigInt(r[3]!);
@@ -120,5 +121,7 @@ export function parse2(str: string): [bigint, bigint] {
         return [wholePart * denominator + numerator, denominator];
     }
 
-    throw new TypeError(`Cannot parse "${str}" as a fraction.`);
+    throw new TypeError(`Cannot parse "${str}" as a fraction: no match.`);
 }
+
+export { parseRevamp as parse };
