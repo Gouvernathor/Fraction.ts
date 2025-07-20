@@ -64,15 +64,3 @@ export function fromAny(obj: FractionAble): Fraction {
     }
     throw new TypeError(`Unsupported type for Fraction creation for ${obj}`);
 }
-
-
-// that should be exported as Function()
-export default function mainConstructor(obj: FractionAble): Fraction;
-export default function mainConstructor(a: bigint|number, b: bigint|number): Fraction;
-export default function mainConstructor(a: FractionAble, b?: bigint|number): Fraction {
-    if (b === undefined) {
-        return fromAny(a);
-    } else {
-        return fromPair(a as bigint|number, b);
-    }
-}
