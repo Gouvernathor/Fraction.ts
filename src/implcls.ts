@@ -48,11 +48,11 @@ export class FractionImpl implements Fraction {
         );
     }
     sub(other: FractionAble): FractionImpl {
-        // not a call to add because inverting the other requires a call to fromAny
         if (typeof other === "bigint") {
             return this.add(-other);
         }
 
+        // not a call to add because inverting the other requires a call to fromAny
         other = fromAny(other);
         return new FractionImpl(
             this.numerator * other.denominator - other.numerator * this.denominator,
@@ -129,18 +129,25 @@ export class FractionImpl implements Fraction {
         return this.compare(fromAny(other)) >= 0n;
     }
 
-    mod(n: FractionAble = ONE_FRAC): FractionImpl {
+    mod(n?: FractionAble): FractionImpl {
         if (n === undefined) {
             return new FractionImpl(this.numerator % this.denominator, 1n);
         }
 
-        n = fromAny(n);
-        if (n.denominator === 0n) {
+        if (this.numerator < 0n) {
+            return this.neg().mod(n).neg();
+        }
+        const nf = fromAny(n);
+        if (nf.numerator === 0n) {
             throw new Error("Modulo by zero.");
         }
+        if (nf.numerator < 0n) {
+            return this.mod(nf.neg()).neg();
+        }
+
         return new FractionImpl(
-            (n.denominator * this.numerator) % (n.numerator * this.denominator),
-            n.denominator * this.denominator
+            (nf.denominator * this.numerator) % (nf.numerator * this.denominator),
+            nf.denominator * this.denominator
         );
     }
 
