@@ -160,9 +160,19 @@ export class FractionImpl implements Fraction {
             BigInt(this.numerator % this.denominator !== 0n && this.numerator < 0n);
     }
     round(): bigint {
-        const sign = this.numerator < 0n ? -1n : 1n;
-        return this.numerator / this.denominator +
-            sign * (BigInt(this.numerator !== 0n) + 2n * BigInt(((this.numerator*sign) % this.denominator) > this.denominator));
+        // if (this.numerator === 0n) {
+        //     return 0n;
+        // }
+        const sign = this.numerator >= 0n ? 1n : -1n;
+        const twiceMod = 2n * (sign*this.numerator % this.denominator);
+        const roundFarZero = sign !== -1n ?
+            twiceMod >= this.denominator :
+            twiceMod > this.denominator;
+        return (this.numerator / this.denominator) + sign * BigInt(roundFarZero);
+
+        // return this.numerator / this.denominator +
+        //     sign * (BigInt(this.numerator >= 0n) +
+        //         BigInt((2n * ((this.numerator*sign) % this.denominator)) > this.denominator));
     }
     roundTo(multiple: Fraction): FractionImpl {
         const n = this.numerator * multiple.denominator;
