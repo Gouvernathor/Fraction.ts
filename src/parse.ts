@@ -97,7 +97,7 @@ function parseRevamp(str: string): [bigint, bigint] {
             const fracPart = BigInt(r[2]!);
             const denominator = 10n ** BigInt(r[2]!.length);
             return [intPart * denominator + fracPart, denominator];
-        } else if (r[3] === "'" && r[5] !== "'") {
+        } else if ((r[3] === "'") !== (r[5] === "'")) {
             // mismatched repeating enclosing
             throw new TypeError(`Cannot parse "${str}" as a fraction: mismatched repeating enclosing.`);
         } else {
