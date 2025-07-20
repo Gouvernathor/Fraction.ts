@@ -1,5 +1,7 @@
+import { frexp } from "./mathUtils";
+
 /**
- * FIXME This function doesn't seem to return the most exact fraction for a float (64).
+ * This function doesn't seem to return the most exact fraction for a float (64).
  */
 function fareySequences(num: number): [bigint, bigint] {
     let s = 1;
@@ -57,4 +59,34 @@ function fareySequences(num: number): [bigint, bigint] {
 }
 
 
-export { fareySequences as tupleFromNumber };
+/**
+ * Adapted from the C code for CPython's float.as_integer_ratio()
+ */
+function exact(num: number): [bigint, bigint] {
+    const self_double = num;
+
+    // checks for inf and nan
+
+    let [float_part, exponent] = frexp(self_double); // self_double = float_part * (2 ** exponent) exactly
+
+    // TODO make that 300 non-magic
+    for (let i = 0; i<300 && float_part !== Math.floor(float_part); i++) {
+        float_part *= 2;
+        exponent--;
+    }
+    // now float_part is an integer and self_double == float_part * (2 ** exponent) exactly
+
+    let numerator = BigInt(Math.floor(float_part));
+    let denominator = 1n;
+
+    if (exponent > 0) {
+        numerator <<= exponent;
+    } else {
+        denominator <<= -exponent;
+    }
+
+    return [numerator, denominator];
+}
+
+
+export { exact as tupleFromNumber };
