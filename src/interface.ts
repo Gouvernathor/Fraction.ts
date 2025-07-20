@@ -2,7 +2,6 @@ export type FractionAble = Fraction
     | bigint | number | string
     | [bigint|number, bigint|number]
     | { numerator: bigint; denominator: bigint };
-type Numeric = Fraction | bigint | number;
 
 export interface Fraction {
     readonly numerator: bigint;
@@ -57,7 +56,7 @@ export interface Fraction {
      * Simplifies the fraction to lower terms.
      * @param precision The maximum allowed error for the simplification.
      */
-    simplify(precision: Numeric): Fraction;
+    simplify(precision: FractionAble): Fraction;
 
     valueOf(): number|bigint;
     toString(): string;

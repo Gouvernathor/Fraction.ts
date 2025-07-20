@@ -252,7 +252,7 @@ export class FractionImpl implements Fraction {
             yield s;
         }
     }
-    simplify(error: number | bigint | Fraction): Fraction {
+    simplify(error: FractionAble): Fraction {
         // takes the simplest functions from the continued,
         // until it is within the required error gap
 
