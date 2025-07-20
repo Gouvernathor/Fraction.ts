@@ -239,7 +239,7 @@ export class FractionImpl implements Fraction {
         do {
             yield a / b;
             [a, b] = [b, a % b];
-        } while (a !== 0n);
+        } while (a !== 1n);
     }
     private *generateSimplifiedAbs(): Generator<FractionImpl> {
         const cont = Array.from(this.abs().absToContinued());
