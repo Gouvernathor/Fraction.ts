@@ -1,5 +1,3 @@
-import { frexp } from "./mathUtils";
-
 /**
  * This function doesn't seem to return the most exact fraction for a float (64).
  */
@@ -60,6 +58,33 @@ function fareySequences(num: number): [bigint, bigint] {
 
 
 /**
+ * Supposes that `arg` is a finite number.
+ */
+function frexp(arg: number): [number, bigint] {
+    const absArg = Math.abs(arg);
+
+    if (absArg === 0) {
+        return [0, 0n];
+    }
+
+    let exponent = BigInt(Math.max(-1023, Math.floor(Math.log2(absArg))+1));
+    let x = absArg / Number(2n ** exponent);
+
+    while (x < 0.5) {
+        x *= 2;
+        exponent--;
+    }
+    while (x >= 1) {
+        x /= 2;
+        exponent++;
+    }
+
+    if (arg < 0) {
+        x = -x;
+    }
+    return [x, exponent];
+}
+/**
  * Adapted from the C code for CPython's float.as_integer_ratio()
  */
 function exact(num: number): [bigint, bigint] {
@@ -88,5 +113,53 @@ function exact(num: number): [bigint, bigint] {
     return [numerator, denominator];
 }
 
+/**
+ * Returns m and exp such that arg = m * (2 ** exp) exactly, and m and exp are (big)integers.
+ */
+function frexpBig(arg: number): [bigint, bigint] {
+    const absArg = Math.abs(arg);
 
-export { exact as tupleFromNumber };
+    if (absArg === 0) {
+        return [0n, 0n];
+    }
+
+    let exponent = BigInt(Math.max(-1023, Math.floor(Math.log2(absArg))+1));
+    let m_float = absArg / (2 ** Number(exponent));
+
+    while (m_float < 0.5) {
+        m_float *= 2;
+        exponent--;
+    }
+    while (m_float >= 1) {
+        m_float /= 2;
+        exponent++;
+    }
+
+    if (arg < 0) {
+        m_float = -m_float;
+    }
+
+    for (let i = 0; i<300 && m_float !== Math.floor(m_float); i++) {
+        m_float *= 2;
+        exponent--;
+    }
+
+    return [BigInt(Math.floor(m_float)), exponent];
+}
+function exact2(num: number): [bigint, bigint] {
+    const [m, exp] = frexpBig(num);
+
+    let numerator = m;
+    let denominator = 1n;
+
+    if (exp > 0) {
+        numerator <<= exp;
+    } else {
+        denominator <<= -exp;
+    }
+
+    return [numerator, denominator];
+}
+
+
+export { exact2 as tupleFromNumber };
