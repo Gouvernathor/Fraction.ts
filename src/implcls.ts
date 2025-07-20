@@ -167,7 +167,7 @@ export class FractionImpl implements Fraction {
         const twiceMod = 2n * (sign*this.numerator % this.denominator);
         const roundFarZero = sign !== -1n ?
             twiceMod >= this.denominator :
-            twiceMod > this.denominator;
+            twiceMod > this.denominator; // JS rule : towards +Inf, not away from zero
         return (this.numerator / this.denominator) + sign * BigInt(roundFarZero);
 
         // return this.numerator / this.denominator +
@@ -177,12 +177,8 @@ export class FractionImpl implements Fraction {
     roundTo(multiple: Fraction): FractionImpl {
         const n = this.numerator * multiple.denominator;
         const d = this.denominator * multiple.numerator;
-        const r = n % d;
 
-        let k = n / d;
-        if (2n*r >= d) {
-            k++;
-        }
+        const k = n / d + BigInt(2n * (n % d) >= d);
         return new FractionImpl(k * multiple.numerator, multiple.denominator);
     }
 
