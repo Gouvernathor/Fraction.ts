@@ -67,15 +67,15 @@ export function parse(str: string): [bigint, bigint] {
 }
 
 // decimal forms
-const decimalInt = /^(\d+)\.?$/g; // 123. or 123
+const decimalInt = /^(\d+)\.?$/; // 123. or 123
 
 // decimal with repeating part
-const decimalRepeatingFloat = /^(\d*)\.(\d*)(?:('|\()(\d+)('|\)))?$/g;
+const decimalRepeatingFloat = /^(\d*)\.(\d*)(?:('|\()(\d+)('|\)))?$/;
 
 // fraction forms
-/^\d+[/:]\d+$/g; // 123\456 or 123:456
+/^\d+[/:]\d+$/; // 123\456 or 123:456
 // with a preceding whole number
-const fractionWithWhole = /^(?:(\d+) )?(\d+)[/:](\d+)$/g; // 123 456/789 or 123 456:789
+const fractionWithWhole = /^(?:(\d+) )?(\d+)[/:](\d+)$/; // 123 456/789 or 123 456:789
 
 export function parse2(str: string): [bigint, bigint] {
     let r = decimalInt.exec(str);
