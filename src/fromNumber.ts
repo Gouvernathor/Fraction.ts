@@ -1,7 +1,7 @@
 /**
  * FIXME This function doesn't seem to return the most exact fraction for a float (64).
  */
-export function tupleFromNumber(num: number): [bigint, bigint] {
+function fareySequences(num: number): [bigint, bigint] {
     let s = 1;
     if (num < 0) {
         s = -1;
@@ -55,3 +55,6 @@ export function tupleFromNumber(num: number): [bigint, bigint] {
     }
     return [BigInt(n * z * s), BigInt(d)];
 }
+
+
+export { fareySequences as tupleFromNumber };
