@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { Fraction } from "../../src/index.js";
+import { Fraction } from "../../src/index";
 
 // fromNumeric
 
