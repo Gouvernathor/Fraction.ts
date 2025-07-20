@@ -183,12 +183,18 @@ export class FractionImpl implements Fraction {
     }
 
     asIrreducible(): IrreducibleFractionImpl {
-        // TODO test if this works for a negative fraction
         const g = gcd(this.numerator, this.denominator);
-        return new IrreducibleFractionImpl(
-            this.numerator / g,
-            this.denominator / g
-        );
+        if (g >= 0n) {
+            return new IrreducibleFractionImpl(
+                this.numerator / g,
+                this.denominator / g
+            );
+        } else {
+            return new IrreducibleFractionImpl(
+                -this.numerator / g,
+                -this.denominator / g
+            );
+        }
     }
     limitDenominator(maxDenominator: bigint): IrreducibleFractionImpl {
         if (maxDenominator < 1) {
