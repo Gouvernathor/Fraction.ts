@@ -205,8 +205,10 @@ export class FractionImpl implements Fraction {
             return this;
         }
 
+        const sign = this.numerator < 0n ? -1n : 1n;
+
         let [p0, q0, p1, q1] = [0n, 1n, 1n, 0n];
-        let [n, d] = [this.numerator, this.denominator];
+        let [n, d] = [sign*this.numerator, this.denominator];
         while (true) {
             const a = n / d;
             const q2 = q0 + a * q1;
@@ -219,10 +221,10 @@ export class FractionImpl implements Fraction {
         const k = (maxDenominator - q0) / q1;
 
         if (2n*d*(q0 + k*q1) <= this.denominator) {
-            return new IrreducibleFractionImpl(p1, q1);
+            return new IrreducibleFractionImpl(sign*p1, q1);
         } else {
             return new IrreducibleFractionImpl(
-                p0 + k * p1,
+                sign*(p0 + k * p1),
                 q0 + k * q1
             );
         }
