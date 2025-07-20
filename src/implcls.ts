@@ -109,7 +109,7 @@ export class FractionImpl implements Fraction {
     private compare(other: Fraction): bigint {
         return this.numerator * other.denominator - other.numerator * this.denominator;
     }
-    compareTo(other: FractionAble): number {
+    compareTo(other: FractionAble): 1|0|-1 {
         const c = this.compare(fromAny(other));
         return c === 0n ? 0 : c > 0n ? 1 : -1;
     }
