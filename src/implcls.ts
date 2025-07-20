@@ -19,14 +19,18 @@ export class FractionImpl implements Fraction {
     abs(): FractionImpl {
         return new FractionImpl(
             this.numerator < 0n ? -this.numerator : this.numerator,
-            this.denominator < 0n ? -this.denominator : this.denominator
+            this.denominator
         );
     }
     neg(): FractionImpl {
         return new FractionImpl(-this.numerator, this.denominator);
     }
     invert(): FractionImpl {
-        return new FractionImpl(this.denominator, this.numerator);
+        if (this.numerator > 0n) {
+            return new FractionImpl(this.denominator, this.numerator);
+        } else {
+            return new FractionImpl(-this.denominator, -this.numerator);
+        }
     }
 
     add(other: FractionAble): FractionImpl {
