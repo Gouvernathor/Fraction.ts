@@ -74,19 +74,31 @@ export class FractionImpl implements Fraction {
             if (other === 0n) {
                 throw new Error("Division by zero.");
             }
-            return new FractionImpl(
-                this.numerator,
-                this.denominator * other
-            );
+            if (other > 0n) {
+                return new FractionImpl(
+                    this.numerator,
+                    this.denominator * other
+                );
+            } else {
+                return new FractionImpl(
+                    -this.numerator,
+                    -this.denominator * other
+                );
+            }
         }
 
         other = fromAny(other);
         if (other.numerator === 0n) {
             throw new Error("Division by zero.");
         }
+        let [otherN, otherD] = [other.numerator, other.denominator];
+        if (otherN < 0n) {
+            otherN = -otherN;
+            otherD = -otherD;
+        }
         return new FractionImpl(
-            this.numerator * other.denominator,
-            this.denominator * other.numerator
+            this.numerator * otherD,
+            this.denominator * otherN
         );
     }
 

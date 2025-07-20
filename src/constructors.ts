@@ -44,6 +44,10 @@ export function fromTuple([num, denom]: [bigint|number, bigint|number]): Fractio
 }
 
 export function fromObject({numerator, denominator }: { numerator: bigint; denominator: bigint }): Fraction {
+    if (denominator < 0n) {
+        numerator = -numerator;
+        denominator = -denominator;
+    }
     return new FractionImpl(numerator, denominator);
 }
 
