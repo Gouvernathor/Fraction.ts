@@ -294,7 +294,9 @@ export class FractionImpl implements Fraction {
         // otherwise, first try to reduce to an irreducible fraction then work with that.
         return this.asIrreducible().valueOf();
     }
-    toString = stringize;
+    toString(): string {
+        return this.asIrreducible().toString();
+    }
     [Symbol.toPrimitive](hint: string): string | number | bigint {
         if (hint === "string") {
             return this.toString();
@@ -345,4 +347,5 @@ class IrreducibleFractionImpl extends FractionImpl implements IrreducibleFractio
         // and the result will be infinity.
         // if both are, the result will be NaN.
     }
+    override toString = stringize;
 }
