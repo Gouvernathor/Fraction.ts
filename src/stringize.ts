@@ -1,4 +1,4 @@
-import { Fraction } from "./interface";
+import { Fraction } from "./interface.js";
 
 const MAX_CYCLE_LENGTH = 2000n;
 

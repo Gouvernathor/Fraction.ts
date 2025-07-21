@@ -1,7 +1,7 @@
-import { fromAny } from "./constructors";
-import { Fraction, FractionAble, IrreducibleFraction } from "./interface";
-import { gcd } from "./mathUtils";
-import { stringize } from "./stringize";
+import { fromAny } from "./constructors.js";
+import { Fraction, FractionAble, IrreducibleFraction } from "./interface.js";
+import { gcd } from "./mathUtils.js";
+import { stringize } from "./stringize.js";
 
 export class FractionImpl implements Fraction {
     constructor(

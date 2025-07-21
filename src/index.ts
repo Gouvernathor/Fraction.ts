@@ -1,7 +1,7 @@
-import type { FractionAble, Fraction as IFraction } from "./interface";
-import * as constructors from "./constructors";
+import type { FractionAble, Fraction as IFraction } from "./interface.js";
+import * as constructors from "./constructors.js";
 
-export type { IrreducibleFraction, FractionAble} from "./interface";
+export type { IrreducibleFraction, FractionAble} from "./interface.js";
 
 export type Fraction = IFraction;
 // export type { IFraction as Fraction };

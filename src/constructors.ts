@@ -1,7 +1,7 @@
-import { tupleFromNumber } from "./fromNumber";
-import { FractionImpl } from "./implcls";
-import { Fraction, FractionAble } from "./interface";
-import { parse } from "./parse";
+import { tupleFromNumber } from "./fromNumber.js";
+import { FractionImpl } from "./implcls.js";
+import { Fraction, FractionAble } from "./interface.js";
+import { parse } from "./parse.js";
 
 function fromBigInt(num: bigint): Fraction {
     return new FractionImpl(num, 1n);
