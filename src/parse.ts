@@ -81,9 +81,17 @@ const fractionWithWhole = /^(?:(\d+) )?(\d+)[/:](\d+)$/; // 123 456/789 or 123 4
  * A less efficient version (using several regexes), but more readable and more permissive.
  */
 function parseRevamp(str: string): [bigint, bigint] {
+    let sign = 1n;
+    if (str[0] === "-") {
+        sign = -1n;
+        str = str.slice(1);
+    } else if (str[0] === "+") {
+        str = str.slice(1);
+    }
+
     let r: ReturnType<typeof RegExp.prototype.exec>;
     if (r = decimalInt.exec(str)) {
-        return [BigInt(r[1]!), 1n];
+        return [sign* BigInt(r[1]!), 1n];
     }
 
     if (r = decimalRepeatingFloat.exec(str)) {
@@ -96,7 +104,7 @@ function parseRevamp(str: string): [bigint, bigint] {
             }
             const fracPart = BigInt(r[2]!);
             const denominator = 10n ** BigInt(r[2]!.length);
-            return [intPart * denominator + fracPart, denominator];
+            return [sign* (intPart * denominator + fracPart), denominator];
         } else if ((r[3] === "'") !== (r[5] === "'")) {
             // mismatched repeating enclosing
             throw new TypeError(`Cannot parse "${str}" as a fraction: mismatched repeating enclosing.`);
@@ -107,7 +115,7 @@ function parseRevamp(str: string): [bigint, bigint] {
             const repeatingDenominator = 10n ** BigInt(r[4]!.length) - 1n;
             const denominator = nonRepeatingDenominator * repeatingDenominator;
             const numerator = repeatingPart + denominator * intPart + repeatingDenominator * nonRepeatingPart;
-            return [numerator, denominator];
+            return [sign* numerator, denominator];
         }
     }
 
@@ -118,7 +126,7 @@ function parseRevamp(str: string): [bigint, bigint] {
         if (denominator === 0n) {
             throw new TypeError(`Cannot parse "${str}" as a fraction: denominator cannot be zero.`);
         }
-        return [wholePart * denominator + numerator, denominator];
+        return [sign* (wholePart * denominator + numerator), denominator];
     }
 
     throw new TypeError(`Cannot parse "${str}" as a fraction: no match.`);

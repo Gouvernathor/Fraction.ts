@@ -92,8 +92,7 @@ it("returns a string representation of the fraction", () => {
     expect(f[Symbol.toPrimitive]("string")).toBe("2000000");
     expect(`${f}`).toBe("2000000");
 
-    // f = Fraction("-.5"); // TODO: support negative numbers in strings
-    f = Fraction("0.5").neg();
+    f = Fraction("-.5");
     expect(f.toString()).toBe("-0.5");
     expect(f[Symbol.toPrimitive]("string")).toBe("-0.5");
     expect(`${f}`).toBe("-0.5");
@@ -103,8 +102,7 @@ it("returns a string representation of the fraction", () => {
     expect(f[Symbol.toPrimitive]("string")).toBe("123");
     expect(`${f}`).toBe("123");
 
-    // f = Fraction("-123"); // TODO
-    f = Fraction("123").neg();
+    f = Fraction("-123");
     expect(f.toString()).toBe("-123");
     expect(f[Symbol.toPrimitive]("string")).toBe("-123");
     expect(`${f}`).toBe("-123");
@@ -114,8 +112,7 @@ it("returns a string representation of the fraction", () => {
     expect(f[Symbol.toPrimitive]("string")).toBe("123.4");
     expect(`${f}`).toBe("123.4");
 
-    // f = Fraction("-123.4"); // TODO
-    f = Fraction("123.4").neg();
+    f = Fraction("-123.4");
     expect(f.toString()).toBe("-123.4");
     expect(f[Symbol.toPrimitive]("string")).toBe("-123.4");
     expect(`${f}`).toBe("-123.4");
@@ -125,8 +122,7 @@ it("returns a string representation of the fraction", () => {
     expect(f[Symbol.toPrimitive]("string")).toBe("123");
     expect(`${f}`).toBe("123");
 
-    // f = Fraction("-123."); // TODO
-    f = Fraction("123.").neg();
+    f = Fraction("-123.");
     expect(f.toString()).toBe("-123");
     expect(f[Symbol.toPrimitive]("string")).toBe("-123");
     expect(`${f}`).toBe("-123");
@@ -136,8 +132,7 @@ it("returns a string representation of the fraction", () => {
     expect(f[Symbol.toPrimitive]("string")).toBe("123.4(56)");
     expect(`${f}`).toBe("123.4(56)");
 
-    // f = Fraction("-123.4(56)"); // TODO
-    f = Fraction("123.4(56)").neg();
+    f = Fraction("-123.4(56)");
     expect(f.toString()).toBe("-123.4(56)");
     expect(f[Symbol.toPrimitive]("string")).toBe("-123.4(56)");
     expect(`${f}`).toBe("-123.4(56)");
@@ -147,20 +142,17 @@ it("returns a string representation of the fraction", () => {
     expect(f[Symbol.toPrimitive]("string")).toBe("123.(4)");
     expect(`${f}`).toBe("123.(4)");
 
-    // f = Fraction("-123.(4)"); // TODO
-    f = Fraction("123.(4)").neg();
+    f = Fraction("-123.(4)");
     expect(f.toString()).toBe("-123.(4)");
     expect(f[Symbol.toPrimitive]("string")).toBe("-123.(4)");
     expect(`${f}`).toBe("-123.(4)");
 
     f = Fraction("0/1");
-//   param: "0/1",
     expect(f.toString()).toBe("0");
     expect(f[Symbol.toPrimitive]("string")).toBe("0");
     expect(`${f}`).toBe("0");
 
     f = Fraction("1/9");
-//   param: "0/1",
     expect(f.toString()).toBe("0.(1)");
     expect(f[Symbol.toPrimitive]("string")).toBe("0.(1)");
     expect(`${f}`).toBe("0.(1)");
@@ -170,8 +162,7 @@ it("returns a string representation of the fraction", () => {
     expect(f[Symbol.toPrimitive]("string")).toBe("0.269(736842105263157894)");
     expect(`${f}`).toBe("0.269(736842105263157894)");
 
-    // f = Fraction("-123/456"); // TODO
-    f = Fraction("123/456").neg();
+    f = Fraction("-123/456");
     expect(f.toString()).toBe("-0.269(736842105263157894)");
     expect(f[Symbol.toPrimitive]("string")).toBe("-0.269(736842105263157894)");
     expect(`${f}`).toBe("-0.269(736842105263157894)");
@@ -181,14 +172,12 @@ it("returns a string representation of the fraction", () => {
     expect(f[Symbol.toPrimitive]("string")).toBe("19.269(736842105263157894)");
     expect(`${f}`).toBe("19.269(736842105263157894)");
 
-    // f = Fraction("-19 123/456"); // TODO
-    f = Fraction("19 123/456").neg();
+    f = Fraction("-19 123/456");
     expect(f.toString()).toBe("-19.269(736842105263157894)");
     expect(f[Symbol.toPrimitive]("string")).toBe("-19.269(736842105263157894)");
     expect(`${f}`).toBe("-19.269(736842105263157894)");
 
-    // f = Fraction("+33.3(3)"); // TODO allow prepending +
-    f = Fraction("33.3(3)");
+    f = Fraction("+33.3(3)");
     expect(f.toString()).toBe("33.(3)");
     expect(f[Symbol.toPrimitive]("string")).toBe("33.(3)");
     expect(`${f}`).toBe("33.(3)");
@@ -352,8 +341,7 @@ it("returns a string representation of the fraction", () => {
     expect(f[Symbol.toPrimitive]("string")).toBe("-99");
     expect(`${f}`).toBe("-99");
 
-    // f = Fraction("-92332.1192"); // TODO
-    f = Fraction("92332.1192").neg();
+    f = Fraction("-92332.1192");
     expect(f.toString()).toBe("-92332.1192");
     expect(f[Symbol.toPrimitive]("string")).toBe("-92332.1192");
     expect(`${f}`).toBe("-92332.1192");
@@ -363,8 +351,7 @@ it("returns a string representation of the fraction", () => {
     expect(f[Symbol.toPrimitive]("string")).toBe("88.92933(12111)");
     expect(`${f}`).toBe("88.92933(12111)");
 
-    // f = Fraction('-192322.823(123)'); // TODO
-    f = Fraction('192322.823(123)').neg();
+    f = Fraction('-192322.823(123)');
     expect(f.toString()).toBe("-192322.8(231)");
     expect(f[Symbol.toPrimitive]("string")).toBe("-192322.8(231)");
     expect(`${f}`).toBe("-192322.8(231)");
