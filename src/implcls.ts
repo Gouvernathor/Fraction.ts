@@ -271,23 +271,28 @@ export class FractionImpl implements Fraction {
         return this; // if nothing found, return the absolute value
     }
 
-    protected numValue(): number|bigint {
+    protected toNumberIfSafe(): number|null {
+        if (this.numerator <= Number.MAX_SAFE_INTEGER && this.denominator <= Number.MAX_SAFE_INTEGER) {
+            return Number(this.numerator) / Number(this.denominator);
+        }
+        return null; // not safe to convert
+    }
+    valueOf(): number | bigint {
         if (this.denominator === 1n) {
             return this.numerator;
         }
-        return Number(this.numerator) / Number(this.denominator);
-    }
-    valueOf(): number | bigint {
-        const nv = this.numValue();
-        if (!Number.isFinite(nv)) {
-            return nv;
+        if (this.numerator < 0n) {
+            return -this.neg().valueOf();
         }
-        // if one of the values is out of f64 bounds, as a number it will be infinity,
-        // and the result will be infinity.
-        // if both are, the result will be NaN.
-        // reducing both values can help bring them into bounds.
-        // if that's still NaN, give up
-        return this.asIrreducible().numValue();
+
+        // if safe, cast the two operands then divide them.
+        let safeNum = this.toNumberIfSafe();
+        if (safeNum !== null) {
+            return safeNum;
+        }
+
+        // otherwise, first try to reduce to an irreducible fraction then work with that.
+        return this.asIrreducible().valueOf();
     }
     toString = stringize;
     [Symbol.toPrimitive](hint: string): string | number | bigint {
@@ -308,8 +313,36 @@ class IrreducibleFractionImpl extends FractionImpl implements IrreducibleFractio
     }
 
     override valueOf(): number | bigint {
-        return this.numValue();
+        if (this.denominator === 1n) {
+            return this.numerator;
+        }
+
+        // if safe, cast the two operands then divide them.
+        let safeNum = this.toNumberIfSafe();
+        if (safeNum !== null) {
+            return safeNum;
+        }
+
+        if (this.numerator > this.denominator) {
+            // sum the integer part with the fractional part, guaranteeing that the integral part is correct.
+            const int = this.numerator / this.denominator;
+            const nDenom = Number(this.denominator);
+            const remainder = (Number(this.numerator) % nDenom) / nDenom;
+            if (remainder === 0 || !Number.isFinite(remainder)) {
+                return int;
+            }
+            return Number(int) + remainder;
+        }
+
+        // reduce the denominator by a factor of 2 and try again
+        if (this.denominator > 2n) {
+            return this.limitDenominator(this.denominator>>1n).valueOf();
+        }
+
+        // if that's still out of bounds, give up
+        return Number(this.numerator) / Number(this.denominator);
+        // if one of the values is out of f64 bounds, as a number it will be infinity,
+        // and the result will be infinity.
+        // if both are, the result will be NaN.
     }
 }
-
-const ONE_FRAC = new IrreducibleFractionImpl(1n, 1n);
