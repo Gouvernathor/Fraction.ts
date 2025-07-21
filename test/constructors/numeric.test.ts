@@ -93,6 +93,14 @@ it("works for random floats", () => {
     expect(Number(result.numerator) / Number(result.denominator)).toBeCloseTo(bigNumber, 15);
 });
 
+const fractionEquals = Fraction.fromNumeric(1).equals;
+it("works for float values", () => {
+    expect(Fraction.fromNumeric(2.5)).toSatisfy(fractionEquals.bind(Fraction(5, 2)));
+    expect(Fraction.fromNumeric(-0.0)).toSatisfy(fractionEquals.bind(Fraction(0, 1)));
+    expect(Fraction.fromNumeric(0.1))
+        .toSatisfy(fractionEquals.bind(Fraction(3602879701896397n, 36028797018963968n)));
+});
+
 
 it("throws for NaN", () => {
     expect(() => Fraction.fromNumeric(NaN)).toThrow(TypeError);
