@@ -4,7 +4,7 @@ const MAX_CYCLE_LENGTH = 2000n;
 
 function modPow(base: bigint, exp: bigint, mod: bigint): bigint {
     let result = 1n;
-    while (exp > 1n) {
+    while (exp > 0n) {
         if (exp & 1n) {
             result = (result * base) % mod;
         }
