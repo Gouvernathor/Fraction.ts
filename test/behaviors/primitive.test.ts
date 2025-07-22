@@ -26,11 +26,13 @@ it("rounds a fraction correctly to a JS number", () => {
     expect(f.valueOf()).toBeCloseTo(1 / 3);
     expect(f[Symbol.toPrimitive]("number")).toBeCloseTo(1 / 3);
     expect(+f).toBeCloseTo(1 / 3);
+    expect(Number(f)).toBeCloseTo(1 / 3);
 
     f = Fraction(1, 10);
     expect(f.valueOf()).toBeCloseTo(0.1);
     expect(f[Symbol.toPrimitive]("number")).toBeCloseTo(0.1);
     expect(+f).toBeCloseTo(0.1);
+    expect(Number(f)).toBeCloseTo(0.1);
 
     // sanity check
     expect(Number("2".repeat(400)+"7")).toBe(Infinity);
@@ -38,6 +40,7 @@ it("rounds a fraction correctly to a JS number", () => {
     expect(f.valueOf()).toBeCloseTo(2/3);
     expect(f[Symbol.toPrimitive]("number")).toBeCloseTo(2/3);
     expect(+f).toBeCloseTo(2/3);
+    expect(Number(f)).toBeCloseTo(2/3);
 });
 it("returns a bigint for integral values", () => {
     let f = Fraction(5, 1);
@@ -45,23 +48,27 @@ it("returns a bigint for integral values", () => {
     expect(f[Symbol.toPrimitive]("number")).toBe(5);
     expect(f[Symbol.toPrimitive]("default")).toBe(5n);
     expect(+f).toBe(5);
+    expect(Number(f)).toBe(5);
 
     f = Fraction(-5, 1);
     expect(f.valueOf()).toBe(-5n);
     expect(f[Symbol.toPrimitive]("number")).toBe(-5);
     expect(f[Symbol.toPrimitive]("default")).toBe(-5n);
     expect(+f).toBe(-5);
+    expect(Number(f)).toBe(-5);
 });
 it("works just as well for irreducible fractions", () => {
     let f = Fraction(1, 3).asIrreducible();
     expect(f.valueOf()).toBeCloseTo(1 / 3);
     expect(f[Symbol.toPrimitive]("number")).toBeCloseTo(1 / 3);
     expect(+f).toBeCloseTo(1 / 3);
+    expect(Number(f)).toBeCloseTo(1 / 3);
 
     f = Fraction(1, 10).asIrreducible();
     expect(f.valueOf()).toBeCloseTo(0.1);
     expect(f[Symbol.toPrimitive]("number")).toBeCloseTo(0.1);
     expect(+f).toBeCloseTo(0.1);
+    expect(Number(f)).toBeCloseTo(0.1);
 
     // sanity check
     expect(Number("2".repeat(400)+"7")).toBe(Infinity);
@@ -69,18 +76,21 @@ it("works just as well for irreducible fractions", () => {
     expect(f.valueOf()).toBeCloseTo(2/3);
     expect(f[Symbol.toPrimitive]("number")).toBeCloseTo(2/3);
     expect(+f).toBeCloseTo(2/3);
+    expect(Number(f)).toBeCloseTo(2/3);
 
     f = Fraction(5, 1).asIrreducible();
     expect(f.valueOf()).toBe(5n);
     expect(f[Symbol.toPrimitive]("number")).toBe(5);
     expect(f[Symbol.toPrimitive]("default")).toBe(5n);
     expect(+f).toBe(5);
+    expect(Number(f)).toBe(5);
 
     f = Fraction(-5, 1).asIrreducible();
     expect(f.valueOf()).toBe(-5n);
     expect(f[Symbol.toPrimitive]("number")).toBe(-5);
     expect(f[Symbol.toPrimitive]("default")).toBe(-5n);
     expect(+f).toBe(-5);
+    expect(Number(f)).toBe(-5);
 });
 
 // toString
