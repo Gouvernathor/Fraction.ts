@@ -22,9 +22,9 @@ type MainType = {
 }
 
 const main = ((): MainType => {
-    function mainConstructor(this: any, obj: FractionAble): IFraction;
-    function mainConstructor(this: any, a: bigint|number, b: bigint|number): IFraction;
-    function mainConstructor(this: any, a: FractionAble, b?: bigint|number): IFraction {
+    function mainConstructor(obj: FractionAble): IFraction;
+    function mainConstructor(a: bigint|number, b: bigint|number): IFraction;
+    function mainConstructor(a: FractionAble, b?: bigint|number): IFraction {
         if (b === undefined) {
             return constructors.fromAny(a);
         } else {
