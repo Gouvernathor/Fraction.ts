@@ -8,8 +8,14 @@ it("defaults to number conversion", () => {
     expect(typeof fraction[Symbol.toPrimitive]("default")).toBeOneOf(["number", "bigint"]);
 });
 it("converts to the requested type", () => {
-    const fraction = Fraction(1, 3);
-    expect(typeof fraction[Symbol.toPrimitive]("number")).toBeOneOf(["number", "bigint"]);
+    let fraction = Fraction(5, 1);
+    expect(typeof fraction[Symbol.toPrimitive]("number")).toBe("number");
+    expect(typeof fraction[Symbol.toPrimitive]("default")).toBeOneOf(["number", "bigint"]);
+    expect(typeof fraction[Symbol.toPrimitive]("string")).toBe("string");
+
+    fraction = Fraction(1, 3);
+    expect(typeof fraction[Symbol.toPrimitive]("number")).toBe("number");
+    expect(typeof fraction[Symbol.toPrimitive]("default")).toBeOneOf(["number", "bigint"]);
     expect(typeof fraction[Symbol.toPrimitive]("string")).toBe("string");
 });
 
@@ -36,13 +42,15 @@ it("rounds a fraction correctly to a JS number", () => {
 it("returns a bigint for integral values", () => {
     let f = Fraction(5, 1);
     expect(f.valueOf()).toBe(5n);
-    expect(f[Symbol.toPrimitive]("number")).toBe(5n);
-    expect(() => +f).toThrow();
+    expect(f[Symbol.toPrimitive]("number")).toBe(5);
+    expect(f[Symbol.toPrimitive]("default")).toBe(5n);
+    expect(+f).toBe(5);
 
     f = Fraction(-5, 1);
     expect(f.valueOf()).toBe(-5n);
-    expect(f[Symbol.toPrimitive]("number")).toBe(-5n);
-    expect(() => +f).toThrow();
+    expect(f[Symbol.toPrimitive]("number")).toBe(-5);
+    expect(f[Symbol.toPrimitive]("default")).toBe(-5n);
+    expect(+f).toBe(-5);
 });
 it("works just as well for irreducible fractions", () => {
     let f = Fraction(1, 3).asIrreducible();
@@ -64,13 +72,15 @@ it("works just as well for irreducible fractions", () => {
 
     f = Fraction(5, 1).asIrreducible();
     expect(f.valueOf()).toBe(5n);
-    expect(f[Symbol.toPrimitive]("number")).toBe(5n);
-    expect(() => +f).toThrow();
+    expect(f[Symbol.toPrimitive]("number")).toBe(5);
+    expect(f[Symbol.toPrimitive]("default")).toBe(5n);
+    expect(+f).toBe(5);
 
     f = Fraction(-5, 1).asIrreducible();
     expect(f.valueOf()).toBe(-5n);
-    expect(f[Symbol.toPrimitive]("number")).toBe(-5n);
-    expect(() => +f).toThrow();
+    expect(f[Symbol.toPrimitive]("number")).toBe(-5);
+    expect(f[Symbol.toPrimitive]("default")).toBe(-5n);
+    expect(+f).toBe(-5);
 });
 
 // toString
