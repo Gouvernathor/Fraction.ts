@@ -297,11 +297,18 @@ export class FractionImpl implements Fraction {
     toString(): string {
         return this.asIrreducible().toString();
     }
-    [Symbol.toPrimitive](hint: string): string | number | bigint {
+    [Symbol.toPrimitive](hint: "string"): string;
+    [Symbol.toPrimitive](hint: "number"): number;
+    [Symbol.toPrimitive](hint: "default"): number | bigint;
+    [Symbol.toPrimitive](hint: string) {
         if (hint === "string") {
             return this.toString();
         }
-        return this.valueOf();
+        const value = this.valueOf();
+        if (hint === "number") { // always returns a number (incl. Infinity), not a bigint
+            return Number(value);
+        }
+        return value; // default : bigint or number
     }
 }
 

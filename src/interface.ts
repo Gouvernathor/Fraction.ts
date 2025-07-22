@@ -60,7 +60,9 @@ export interface Fraction {
 
     valueOf(): number|bigint;
     toString(): string;
-    [Symbol.toPrimitive](hint: "number"|"string"|"default"): string|number|bigint;
+    [Symbol.toPrimitive](hint: "string"): string;
+    [Symbol.toPrimitive](hint: "number"): number;
+    [Symbol.toPrimitive](hint: "default"): number|bigint;
 }
 
 export interface IrreducibleFraction extends Fraction {}
