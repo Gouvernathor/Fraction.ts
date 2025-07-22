@@ -1,6 +1,7 @@
 /**
  * This function doesn't seem to return the most exact fraction for a float (64).
  */
+// @ts-expect-error
 function fareySequences(num: number): [bigint, bigint] {
     let s = 1;
     if (num < 0) {
@@ -87,6 +88,7 @@ function frexp(arg: number): [number, bigint] {
 /**
  * Adapted from the C code for CPython's float.as_integer_ratio()
  */
+// @ts-expect-error
 function exact(num: number): [bigint, bigint] {
     const self_double = num;
 

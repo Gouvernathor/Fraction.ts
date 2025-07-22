@@ -1,3 +1,4 @@
+// @ts-expect-error
 function parseLegacy(str: string): [bigint, bigint] {
     let sign = 1n;
     let ndx = 0;
