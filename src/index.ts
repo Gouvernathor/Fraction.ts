@@ -1,5 +1,6 @@
 import type { FractionAble, Fraction as IFraction } from "./interface.js";
 import * as constructors from "./constructors.js";
+import { compare } from "./implcls.js";
 
 export type { IrreducibleFraction, FractionAble} from "./interface.js";
 
@@ -19,6 +20,8 @@ type MainType = {
     fromObject({numerator, denominator }: { numerator: bigint; denominator: bigint }): IFraction;
 
     fromAny(obj: FractionAble): IFraction;
+
+    compare: typeof compare;
 }
 
 const main = ((): MainType => {
@@ -37,6 +40,8 @@ const main = ((): MainType => {
     mainConstructor.fromTuple = constructors.fromTuple;
     mainConstructor.fromObject = constructors.fromObject;
     mainConstructor.fromAny = constructors.fromAny;
+
+    mainConstructor.compare = compare;
     return mainConstructor;
 })();
 // export const Fraction = main;

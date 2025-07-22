@@ -356,3 +356,10 @@ class IrreducibleFractionImpl extends FractionImpl implements IrreducibleFractio
     }
     override toString = stringize;
 }
+
+/**
+ * Ready to be passed to Array.prototype.sort.
+ */
+export function compare(a: FractionAble, b: FractionAble): number {
+    return fromAny(a).compareTo(b);
+}

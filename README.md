@@ -54,7 +54,7 @@ The `abs()`, `neg()` and `invert()` methods are expected simple unary math opera
 
 The `add()`, `sub()`, `mul()` and `div()` methods take a single parameter which can be any `FractionAble` value (including, of course, other `Fraction` objects). They perform an addition, a subtraction, a multiplication or a division, respectively.
 
-The `compareTo()` method takes a `FractionAble` parameter and returns a negative number if this fraction is less than the parameter, a positive number if it is greater, and 0 if they are equal.
+The `compareTo()` method takes a `FractionAble` parameter and returns a negative number if this fraction is less than the parameter, a positive number if it is greater, and 0 if they are equal. The `Fraction.compare()` function is a two-parameter version of this method, which can be passed to `Array.prototype.sort` or similar functions.
 
 The `equals()`, `lt()`, `lte()`, `gt()` and `gte()` methods all take a `FractionAble` parameter and return a boolean indicating whether this fraction is equal to, less than, less than or equal to, greater than, or greater than or equal to the parameter, respectively.
 
