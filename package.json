@@ -22,6 +22,12 @@
   "author": "Gouvernathor",
   "type": "module",
   "main": "index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "directories": {
     "test": "test"
   },
