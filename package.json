@@ -33,9 +33,6 @@
   "files": [
     "dist"
   ],
-  "directories": {
-    "test": "test"
-  },
   "scripts": {
     "test": "vitest",
     "build": "tsc"
