@@ -1,5 +1,5 @@
 {
-  "name": "fraction.ts",
+  "name": "@gouvernathor/fraction.ts",
   "version": "1.0.0",
   "description": "A rational numbers library written in TypeScript",
   "keywords": [
