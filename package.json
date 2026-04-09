@@ -32,5 +32,9 @@
   "devDependencies": {
     "@tsconfig/strictest": "^2.0.5",
     "vitest": "^3.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://codeberg.org/Gouvernathor/Fraction.ts.git"
   }
 }
