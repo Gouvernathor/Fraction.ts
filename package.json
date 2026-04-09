@@ -43,6 +43,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Gouvernathor/fraction.ts.git"
+    "url": "git+https://codeberg.org/Gouvernathor/Fraction.ts.git"
   }
 }
