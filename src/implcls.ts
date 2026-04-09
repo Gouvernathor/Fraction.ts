@@ -110,23 +110,33 @@ export class FractionImpl implements Fraction {
         return this.numerator * other.denominator - other.numerator * this.denominator;
     }
     compareTo(other: FractionAble): 1|0|-1 {
+        if (typeof other === "number") {
+            if (other === Infinity) {
+                return -1;
+            } else if (other === -Infinity) {
+                return 1;
+            }
+        }
         const c = this.compare(fromAny(other));
         return c === 0n ? 0 : c > 0n ? 1 : -1;
     }
     equals(other: FractionAble): boolean {
+        if (typeof other === "number" && !Number.isFinite(other)) {
+            return false;
+        }
         return this.compare(fromAny(other)) === 0n;
     }
     lt(other: FractionAble): boolean {
-        return this.compare(fromAny(other)) < 0n;
+        return compare(this, other) < 0n;
     }
     lte(other: FractionAble): boolean {
-        return this.compare(fromAny(other)) <= 0n;
+        return compare(this, other) <= 0n;
     }
     gt(other: FractionAble): boolean {
-        return this.compare(fromAny(other)) > 0n;
+        return compare(this, other) > 0n;
     }
     gte(other: FractionAble): boolean {
-        return this.compare(fromAny(other)) >= 0n;
+        return compare(this, other) >= 0n;
     }
 
     mod(n?: FractionAble): FractionImpl {
@@ -361,5 +371,19 @@ class IrreducibleFractionImpl extends FractionImpl implements IrreducibleFractio
  * Ready to be passed to Array.prototype.sort.
  */
 export function compare(a: FractionAble, b: FractionAble): number {
+    if (typeof a === "number") {
+        if (a === Infinity) {
+            if (b === Infinity) {
+                return 0;
+            }
+            return 1;
+        } else if (a === -Infinity) {
+            if (b === -Infinity) {
+                return 0;
+            }
+            return -1;
+        }
+    }
+
     return fromAny(a).compareTo(b);
 }
