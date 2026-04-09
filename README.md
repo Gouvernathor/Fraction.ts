@@ -69,3 +69,9 @@ The `asIrreducible()` parameter-less method returns an `IrreducibleFraction` wit
 The `limitDenominator()` and `simplify()` methods serve a similar purpose of reducing the value of the operands of the fraction, at the cost of potentially losing some precision. The `limitDenominator()` method takes a single bigint parameter, which must be 1 or greater, and returns a fraction whose denominator is at most that value, and as close to the original fraction as possible. The `simplify()` method takes a `FractionAble` parameter which specifies the acceptable error margin.
 
 The Fraction object can be converted or coerced to a string, a number or a bigint, either using the JavaScript coercion rules (`+f`, `${f}`, `f + ""`...) or by calling the `toString()` and `valueOf()` methods. The string representation is of the form "1.23(45)", and can always be passed back to the `Fraction.fromString()` constructor to get the same fraction back. The `valueOf()` method returns a bigint if the exact value of the fraction can be represented as such, or a number otherwise. If you want to be sure to get a number, you can either call `Number(f)` or do `+f`.
+
+### Non-numbers
+
+Comparison with (and between, in the case of `Fraction.compare`) Infinity values is supported.
+
+Otherwise, usage of Nan and Infinity values is unspecified, and will generally throw errors.
